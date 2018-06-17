@@ -5,11 +5,11 @@ const MongoClient = require('mongodb').MongoClient
 
 var db
 
-MongoClient.connect('mongodb://demo:demo@ds125146.mlab.com:25146/savage', (err, database) => {
+MongoClient.connect('mongodb://user:useruser1@ds257640.mlab.com:57640/migladi', (err, database) => {
   if (err) return console.log(err)
   db = database
-  app.listen(process.env.PORT || 8000, () => {
-    console.log('listening on 8000')
+  app.listen(process.env.PORT || 4000, () => {
+    console.log('listening on 4000')
   })
 })
 
@@ -19,29 +19,29 @@ app.use(bodyParser.json())
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
-  db.collection('messages').find().toArray((err, result) => {
+  db.collection('creations').find().toArray((err, result) => {
     if (err) return console.log(err)
-    res.render('index.ejs', {messages: result})
+    res.render('index.ejs', {creations: result})
   })
 })
 
 app.get('/react', (req, res) => {
-  db.collection('messages').find().toArray((err, result) => {
+  db.collection('creations').find().toArray((err, result) => {
     if (err) return console.log(err)
     res.json(result)
   })
 })
 
-app.post('/messages', (req, res) => {
-  db.collection('messages').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
+app.post('/creations', (req, res) => {
+  db.collection('creations').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
     if (err) return console.log(err)
     console.log('saved to database')
     res.redirect('/')
   })
 })
 
-app.put('/messages', (req, res) => {
-  db.collection('messages')
+app.put('/creations', (req, res) => {
+  db.collection('creations')
   .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
     $set: {
       thumbUp:req.body.thumbUp + 1
@@ -55,9 +55,9 @@ app.put('/messages', (req, res) => {
   })
 })
 
-app.delete('/messages', (req, res) => {
-  db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+app.delete('/creations', (req, res) => {
+  db.collection('creations').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
     if (err) return res.send(500, err)
-    res.send('Message deleted!')
+    res.send('Creations deleted!')
   })
 })
